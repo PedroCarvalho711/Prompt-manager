@@ -1,4 +1,7 @@
-import { SidebarContent } from '@/components/sidebar/sidebar-content';
+import {
+  SidebarContent,
+  SidebarContentProps,
+} from '@/components/sidebar/sidebar-content';
 import { render, screen } from '@/lib/test-utils';
 import userEvent from '@testing-library/user-event';
 
@@ -7,21 +10,52 @@ jest.mock('next/navigation', () => ({
   useRouter: () => ({ push: pushMock }),
 }));
 
-const makeSut = () => {
-  return render(<SidebarContent prompts={[]} />);
+const initialPrompts = [
+  {
+    id: '1',
+    title: 'Title 01',
+    content: 'Content 01',
+  },
+];
+
+const makeSut = (
+  { prompts = initialPrompts }: SidebarContentProps = {} as SidebarContentProps
+) => {
+  return render(<SidebarContent prompts={prompts} />);
 };
 
 describe('SidebarContent', () => {
-  it('deveria renderizar o botão para criar um novo prompt', () => {
-    makeSut();
+  const user = userEvent.setup();
 
-    expect(screen.getByRole('complementary')).toBeVisible();
-    expect(screen.getByRole('button', { name: 'Novo prompt' })).toBeVisible();
+  describe('Base', () => {
+    it('deveria renderizar o botão para criar um novo prompt', () => {
+      makeSut();
+
+      expect(screen.getByRole('complementary')).toBeVisible();
+      expect(screen.getByRole('button', { name: 'Novo prompt' })).toBeVisible();
+    });
+
+    it('deveria renderizar a lista de prompts', () => {
+      const input = [
+        {
+          id: '1',
+          title: 'Example 01',
+          content: 'Content 01',
+        },
+        {
+          id: '2',
+          title: 'Example 02',
+          content: 'Content 02',
+        },
+      ];
+      makeSut({ prompts: input });
+
+      expect(screen.getByText(input[0].title)).toBeInTheDocument();
+      expect(screen.getAllByRole('paragraph')).toHaveLength(input.length);
+    });
   });
 
   describe('Colapsar / Expandir', () => {
-    const user = userEvent.setup();
-
     it('deveria iniciar expandida e exibir o botão minimizar', () => {
       makeSut();
 
@@ -58,12 +92,12 @@ describe('SidebarContent', () => {
   });
 
   describe('Novo Prompt', () => {
-    it('deveria navegar o usuário para a página de novo prompt / new', async () => {
+    it('deveria navegar o usuario para a paga de novo prompt /new', async () => {
       makeSut();
 
       const newButton = screen.getByRole('button', { name: 'Novo prompt' });
 
-      await userEvent.click(newButton);
+      await user.click(newButton);
 
       expect(pushMock).toHaveBeenCalledWith('/new');
     });

@@ -11,16 +11,16 @@ import { useState } from 'react';
 import { Logo } from '../logo';
 import { Button } from '../ui/button';
 
-// 1. Criamos uma "interface" para dizer ao TypeScript o que é um prompt
-// Isso resolve o erro de "Unexpected any"
-interface SidebarContentProps {
-  prompts: {
-    id: string;
-    title: string;
-  }[];
-}
+type Prompt = {
+  id: string;
+  title: string;
+  content: string;
+};
 
-// 2. Usamos a interface aqui nos parênteses
+export type SidebarContentProps = {
+  prompts: Prompt[];
+};
+
 export const SidebarContent = ({ prompts }: SidebarContentProps) => {
   const router = useRouter();
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -85,15 +85,13 @@ export const SidebarContent = ({ prompts }: SidebarContentProps) => {
                 Novo prompt
               </Button>
             </div>
-
-            {/* Opcional: Se quiser ver os títulos aparecendo, 
-                descomente as linhas abaixo: */}
-            {/* <div className="mt-4">
-              {prompts.map(p => <div key={p.id}>{p.title}</div>)}
-            </div> */}
           </section>
         </>
       )}
+
+      {prompts.map((prompt) => (
+        <p key={prompt.id}>{prompt.title}</p>
+      ))}
     </aside>
   );
 };
