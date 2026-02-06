@@ -101,6 +101,34 @@ describe('SidebarContent', () => {
 
       expect(collapseButton).not.toBeInTheDocument();
     });
+
+    it('deveria exibir o botão de criar um novo prompt na sidebar minimizada', async () => {
+      makeSut();
+      const collapseButton = screen.getByRole('button', {
+        name: /minimizar sidebar/i,
+      });
+
+      await user.click(collapseButton);
+
+      const newPromptButton = screen.getByRole('button', {
+        name: 'Novo prompt',
+      });
+      expect(newPromptButton).toBeVisible();
+    });
+
+    it('não deveria exibir a lista de prompts na sidebar minimizada', async () => {
+      makeSut();
+      const collapseButton = screen.getByRole('button', {
+        name: /minimizar sidebar/i,
+      });
+
+      await user.click(collapseButton);
+
+      const nav = screen.queryByRole('navigation', {
+        name: 'Lista de prompts',
+      });
+      expect(nav).not.toBeInTheDocument();
+    });
   });
 
   describe('Novo Prompt', () => {
@@ -131,15 +159,14 @@ describe('SidebarContent', () => {
       const lastClearCall = pushMock.mock.calls.at(-1);
       expect(lastClearCall?.[0]).toBe('/');
     });
-  });
+    it('deveria iniciar o campo de busca com o search param', () => {
+      const text = 'inicial';
+      const searchParams = new URLSearchParams(`q=${text}`);
+      mockSearchParams = searchParams;
+      makeSut();
+      const searchInput = screen.getByPlaceholderText('Buscar prompts...');
 
-  it('deveria iniciar o campo de busca com o search param', () => {
-    const text = 'inicial';
-    const searchParams = new URLSearchParams(`q=${text}`);
-    mockSearchParams = searchParams;
-    makeSut();
-    const searchInput = screen.getByPlaceholderText('Buscar prompts...');
-
-    expect(searchInput).toHaveValue(text);
+      expect(searchInput).toHaveValue(text);
+    });
   });
 });
