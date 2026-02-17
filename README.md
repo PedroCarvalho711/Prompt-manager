@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Prompt Manager | Clean Architecture & Full Testing
+O Prompt Manager é um projeto de aprendizagem focado em Arquitetura de Software e Testes, desenvolvido com foco em alta qualidade de código, seguindo os princípios de Clean Architecture, SOLID e uma cultura rigorosa de automação de testes.
 
-## Getting Started
+🛠️ Stack Tecnológica
+Framework: Next.js 15 (App Router & Server Actions)
+Linguagem: TypeScript
+Persistência: PostgreSQL & Prisma ORM
+UI/UX: Tailwind CSS & Shadcn/UI
+Testes: Jest, React Testing Library e Playwright
+Padronização: ESLint, Prettier e Lefthook (Git Hooks)
 
-First, run the development server:
+🏗️ Arquitetura e Design de Software
+A aplicação foi estruturada para ser independente de frameworks e ferramentas externas na sua camada central.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Principais Padrões Utilizados:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Clean Architecture: Separação clara entre Domínio, Casos de Uso e Infraestrutura.
+Repository Pattern: Desacoplamento da camada de dados.
+Use Cases (Interactors): Lógica de negócio isolada e testável.
+DTOs (Data Transfer Objects): Tipagem rigorosa para entrada e saída de dados.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+📂 Estrutura de Pastas
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+src/
+├── app/                  # Camada de Framework (Rotas e Server Components)
+│   ├── actions/          # Server Actions (Orquestração entre UI e Use Cases)
+│   └── [id]/             # Rotas dinâmicas da aplicação
+├── core/                 # Camada de Domínio (O coração da aplicação - Independente)
+│   ├── application/      # Casos de Uso (Create, Update, Delete, Search)
+│   └── domain/           # Entidades e Interfaces (Contracts)
+├── infra/                # Camada de Infraestrutura (Implementações externas)
+│   └── repository/       # Implementação do Repositório com Prisma ORM
+├── components/           # Camada de Apresentação (UI Reutilizável)
+│   ├── prompts/          # Componentes de negócio (Formulários, Listas)
+│   └── ui/               # Componentes base (Shadcn/UI/Sonner)
+├── tests/                # Suíte de Testes Unitários e de Integração (Jest)
+└── lib/                  # Configurações globais e utilitários (Prisma Client, etc)
 
-## Learn More
+Qualidade e Cobertura de Testes
+Este projeto foi desenvolvido com foco em TDD (Test Driven Development), alcançando a marca de 100% de cobertura nas camadas lógicas.
 
-To learn more about Next.js, take a look at the following resources:
+📊 Relatório de Coverage (Jest)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Camada	Stmts	Branch	Funcs	Lines
+Use Cases (Core)	100%	100%	100%	100%
+Actions	100%	100%	100%	100%
+Repositories	100%	100%	100%	100%
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Tipos de Testes Implementados:
+Unitários: Validação isolada de Use Cases e Entidades.
+Integração: Testes de Repositórios Prisma e Server Actions.
+E2E (End-to-End): Fluxos completos simulados no Chromium, Firefox e Webkit via Playwright.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
